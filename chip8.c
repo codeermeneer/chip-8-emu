@@ -137,38 +137,43 @@ void emulate_cycle(chip8 *c8)
           c8->V[0xF] = 0;
           break;
         case 0x0004:
-          if (c8->V[Y] > (0xFF - c8->V[X]))
+          unsigned int sum = c8->V[X] + c8->V[Y];
+          c8->V[X] = sum;
+
+          if (sum & 0x100)
             c8->V[0xF] = 1;
           else
             c8->V[0xF] = 0;
-
-          c8->V[X] += c8->V[Y];
           break;
         case 0x0005:
-          if (c8->V[Y] > c8->V[X])
-            c8->V[0xF] = 1;
-          else
-            c8->V[0xF] = 0;
+          unsigned int result = c8->V[X] - c8->V[Y];
+          c8->V[X] = result;
 
-          c8->V[X] -= c8->V[Y];
+          if (result & 0x100)
+            c8->V[0xF] = 0;
+          else
+            c8->V[0xF] = 1;
           break;
         case 0x0006:
-          c8->V[0xF] = c8->V[X] & 1;
+          unsigned char V_F = c8->V[X] & 1;
           c8->V[X] = c8->V[Y];
           c8->V[X] >>= 1;
+          c8->V[0xF] = V_F;
           break;
         case 0x0007:
-          if (c8->V[X] > c8->V[Y])
-            c8->V[0xF] = 1;
-          else
-            c8->V[0xF] = 0;
+          result = c8->V[Y] - c8->V[X];
+          c8->V[X] = result;
 
-          c8->V[X] = c8->V[Y] - c8->V[X];
+          if (result & 0x100)
+            c8->V[0xF] = 0;
+          else
+            c8->V[0xF] = 1;
           break;
         case 0x000E:
-          c8->V[0xF] = c8->V[X] & 0x80;
+          V_F = (c8->V[X] & 0x80) >> 7;
           c8->V[X] = c8->V[Y];
           c8->V[X] <<= 1;
+          c8->V[0xF] = V_F;
           break;
         default:
           printf("Unknown opcode\n");

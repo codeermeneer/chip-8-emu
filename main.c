@@ -1,5 +1,5 @@
-#include "raylib.h"
 #include "chip8.h"
+#include "raylib.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
     }
     DrawTextureEx(checked, (Vector2) {0, 0}, 0.0f, 10.0f, WHITE);
 
-    DrawFPS(0, 0);
+    //DrawFPS(0, 0);
 
 
     EndDrawing();
