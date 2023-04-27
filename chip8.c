@@ -239,6 +239,7 @@ void emulate_cycle(chip8 *c8)
           c8->V[X] = c8->delay_timer;
           break;
         case 0x000A:
+          // TODO wait till key is released
           c8->pc -= 2;
           for (int i = 0; i < 0xF; i++) {
             if (c8->key[i]) {
