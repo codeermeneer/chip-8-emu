@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
     if (c8.draw_flag) {
       for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 64; x++) {
-          if (c8.pixels[y*64+x]) {
+          if (c8.pixels[x][y]) {
             pixels[y*64 + x] = RAYWHITE;
           } else {
             pixels[y*64 + x] = BLACK;
@@ -101,6 +101,7 @@ int main(int argc, char* argv[])
         }
       }
       checked = LoadTextureFromImage(checkedIm);
+      c8.draw_flag = 0;
     }
     DrawTextureEx(checked, (Vector2) {0, 0}, 0.0f, 10.0f, WHITE);
 

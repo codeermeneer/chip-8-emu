@@ -199,23 +199,26 @@ void emulate_cycle(chip8 *c8)
       unsigned char pixel;
 
       c8->V[0xF] = 0;
-      for (int y_line = 0; y_line < N; y_line++) {
-        pixel = c8->memory[c8->I + y_line];
-        for (int x_line = 0; x_line < 8; x_line++) {
-          if((pixel & (0x80 >> x_line)) != 0) {
-            int i = (x + x_line) + ((y + y_line) * 64) % 2048;
-            if(c8->pixels[i] == 0)
-              c8->V[0xF] = 0x0001;
-              c8->pixels[i] ^= 0x0001;
-            }
-              if (x + x_line == 64)
-                  break;
 
+      for (int row = 0; row < N; row++) {
+        pixel = c8->memory[c8->I + row];
+
+        for (int col = 0; col < 8; col++) {
+          if((pixel & (0x80 >> col)) != 0) {
+            if(c8->pixels[x+col][y+row] == 1) {
+              c8->pixels[x+col][y+row] = 0x0;
+              c8->V[0xF] = 0x0001;
+            } else {
+              c8->pixels[x+col][y+row] = 0x1;
+            }
           }
-          if (y + y_line == 32)
-              break;
+          if (x + col == 64)
+            break;
+        }
+        if (y + row == 32)
+          break;
       }
-      c8->draw_flag = true;
+      c8->draw_flag = 1;
       break;
     case 0xE000:
       switch(c8->opcode & 0x000F) {
