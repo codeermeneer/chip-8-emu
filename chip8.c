@@ -264,8 +264,6 @@ void emulate_cycle(chip8 *c8)
           c8->memory[c8->I] = c8->V[X] / 100;
           c8->memory[c8->I+1] = (c8->V[X] % 100) / 10;
           c8->memory[c8->I+2] = (c8->V[X] % 10);
-          //printf("V[X]: %x\n", c8->V[X]);
-          //printf("%d %d %d\n", c8->memory[c8->I], c8->memory[c8->I+1], c8->memory[c8->I+2]);
           break;
         case 0x0055:
           memcpy(&c8->memory[c8->I++], c8->V, X+1);

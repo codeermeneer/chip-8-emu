@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
   InitWindow(screenWidth, screenHeight, "chip-8");
 
-  SetTargetFPS(1000);            // Set our game to run at 240 frames-per-second
+  SetTargetFPS(1000);
   SetTraceLogLevel(LOG_WARNING);
 
   int cpu_freq = 500;
@@ -58,6 +58,9 @@ int main(int argc, char* argv[])
   }
 
   Texture2D checked = LoadTextureFromImage(checkedIm);
+
+  InitAudioDevice();
+  Sound beep = LoadSound("resources/beep.wav");
 
   //--------------------------------------------------------------------------------------
 
@@ -110,6 +113,11 @@ int main(int argc, char* argv[])
 
     EndDrawing();
     //----------------------------------------------------------------------------------
+
+    if (c8.sound_timer > 0 && !IsSoundPlaying(beep))
+      PlaySound(beep);
+    else if (c8.sound_timer == 0 && IsSoundPlaying(beep))
+      StopSound(beep);
   }
 
   // De-Initialization
@@ -117,6 +125,9 @@ int main(int argc, char* argv[])
   UnloadImage(checkedIm);       // Unload CPU (RAM) image data (pixels)
   UnloadTexture(checked);
 
+  UnloadSound(beep);
+
+  CloseAudioDevice();
   CloseWindow();                // Close window and OpenGL context
   //--------------------------------------------------------------------------------------
 
