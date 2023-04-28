@@ -13,6 +13,16 @@ int main(int argc, char* argv[])
 {
   // Initialization
   //--------------------------------------------------------------------------------------
+
+  FILE *rom;
+
+  if (argv[1]) {
+    if ((rom  = fopen(argv[1], "r")) == NULL) {
+      printf("Cannot open file \"%s\"\n", argv[1]);
+      return -1;
+    }
+  }
+
   const int screenWidth = 640;
   const int screenHeight = 320;
 
@@ -28,7 +38,7 @@ int main(int argc, char* argv[])
 
   chip8 c8;
   init(&c8);
-  int rom_size = load_rom(&c8, argv[1]);
+  int rom_size = load_rom(&c8, rom);
   if (rom_size <= 0) {
     return 0;
   }

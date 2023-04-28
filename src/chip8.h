@@ -1,6 +1,8 @@
 #ifndef CHIP8_H_   /* Include guard */
 #define CHIP8_H_
 
+#include <stdio.h>
+
 typedef struct {
   unsigned short opcode;
   unsigned char memory[4096];
@@ -18,7 +20,7 @@ typedef struct {
 
 void init(chip8 *c8);
 
-int load_rom(chip8 *c8, char *rom);
+int load_rom(chip8 *c8, FILE *rom);
 
 void emulate_cycle(chip8 *c8);
 

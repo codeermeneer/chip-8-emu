@@ -47,21 +47,14 @@ void init(chip8 *c8)
   c8->draw_flag = 0;
 }
 
-int load_rom(chip8 *c8, char *rom)
+int load_rom(chip8 *c8, FILE *rom)
 {
-  FILE *file;
+  fseek(rom, 0, SEEK_END);
+  int size = ftell(rom);
+  fseek(rom, 0, SEEK_SET);
 
-  if ((file  = fopen(rom, "r")) == NULL) {
-    printf("Cannot open file %s\n", rom);
-    return -1;
-  }
-
-  fseek(file, 0, SEEK_END);
-  int size = ftell(file);
-  fseek(file, 0, SEEK_SET);
-
-  unsigned int count = fread(c8->memory+512, sizeof(unsigned char), size, file);
-  fclose(file);
+  unsigned int count = fread(c8->memory+512, sizeof(unsigned char), size, rom);
+  fclose(rom);
 
   return count;
 }
