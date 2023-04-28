@@ -31,8 +31,8 @@ int main(int argc, char* argv[])
   SetTargetFPS(1000);
   SetTraceLogLevel(LOG_WARNING);
 
-  int cpu_freq = 500;
-  int timer_freq = 60;
+  const int cpu_freq = 500;
+  const int timer_freq = 60;
   double last_cpu_update = 0;
   double last_timer_update = 0;
 
@@ -47,10 +47,12 @@ int main(int argc, char* argv[])
     printf("%02x%02x\n", c8.memory[i], c8.memory[i+1]);
   }*/
 
-  int width = 64;
-  int height = 32;
+  const int width = 64;
+  const int height = 32;
 
   Color *pixels = (Color *) malloc(width * height * sizeof(Color));
+  double pixel_timer[width][height];
+  memset(pixel_timer, 0, sizeof(pixel_timer));
 
   // Load pixels data into an image structure and create texture
   Image checkedIm = {
@@ -106,10 +108,15 @@ int main(int argc, char* argv[])
     if (c8.draw_flag) {
       for (int y = 0; y < 32; y++) {
         for (int x = 0; x < 64; x++) {
+          delta = GetTime() - pixel_timer[x][y];
           if (c8.pixels[x][y]) {
             pixels[y*64 + x] = RAYWHITE;
+            pixel_timer[x][y] += delta;
           } else {
-            pixels[y*64 + x] = BLACK;
+            if (delta < 1.0/50)
+              pixels[y*64 + x] = RAYWHITE;
+            else
+              pixels[y*64 + x] = BLACK;
           }
         }
       }
