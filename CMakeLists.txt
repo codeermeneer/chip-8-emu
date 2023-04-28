@@ -24,3 +24,9 @@ add_executable(${PROJECT_NAME} main.c chip8.c)
 include_directories(${PROJECT_SOURCE_DIR})
 
 target_link_libraries(${PROJECT_NAME} raylib)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+add_custom_target(copy_resources
+  COMMAND ${CMAKE_COMMAND} -P ${CMAKE_MODULE_PATH}/copy-resources.cmake
+)
+add_dependencies(${PROJECT_NAME} copy_resources)
