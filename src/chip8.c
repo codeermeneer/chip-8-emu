@@ -260,11 +260,9 @@ void emulate_cycle(chip8 *c8)
           c8->memory[c8->I+2] = (c8->V[X] % 10);
           break;
         case 0x0055:
-          //TODO bc_test.ch8 indicates somethings wrong with 0xFX55 and 0xF65
           memcpy(&c8->memory[c8->I++], c8->V, X+1);
           break;
         case 0x0065:
-          //TODO bc_test.ch8 indicates somethings wrong with 0xFX55 and 0xF65
           memcpy(c8->V, &c8->memory[c8->I++], X+1);
           break;
         default:
